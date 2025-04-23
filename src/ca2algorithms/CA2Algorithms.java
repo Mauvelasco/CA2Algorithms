@@ -25,7 +25,7 @@ public class CA2Algorithms {
     public static void main(String[] args) {
            Scanner input = new Scanner(System.in);
            Menu menu1 = Menu.values()[0];
-           int select;
+           int select1;
            select = Integer.parseInt(input.nextLine());
           while (Menu.values()[select] !=menu1.EXIT)    
         {
