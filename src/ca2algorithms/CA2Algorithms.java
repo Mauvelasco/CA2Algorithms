@@ -4,6 +4,7 @@
  */
 package ca2algorithms;
 import java.util.*;
+import java.util.Calendar;
 
 /**
  *
@@ -23,22 +24,25 @@ public class CA2Algorithms {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-           Scanner input = new Scanner(System.in);
-           Menu menu1 = Menu.values()[0];
-           int select1;
-           select = Integer.parseInt(input.nextLine());
-          while (Menu.values()[select] !=menu1.EXIT)    
-        {
-             try
-            {
-                menu1 = Menu.valueOf(input.nextLine());  
-                select = Integer.parseInt(input.nextLine());
-            }catch (IllegalArgumentException e)
-            {
-                
-            }
-    
-    }
-    
+        Calendar calendar = Calendar.getInstance();
+        Manager mgr = new Manager("Laura",122,calendar);
+        Employee emp1 = new Employee("Oscar",122,calendar);
+        Deparment dept = new Deparment("Finances");
+        
+        
+        System.out.println(mgr.getName());
+        dept.assign(mgr);
+        dept.assign(emp1);
+        dept.assign(mgr);
+        dept.assign(emp1);
+        dept.assign(mgr);
+        dept.assign(emp1);
+        System.out.println(dept.getManager());
+        System.out.println(mgr.getStartDate());
+        System.out.println(mgr.getWage());
+        
+        System.out.println(dept.getName());
+        System.out.println(dept.getSize());
+        
 }
 }
