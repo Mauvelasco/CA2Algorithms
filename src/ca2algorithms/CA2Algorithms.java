@@ -131,8 +131,22 @@ public class CA2Algorithms {
                         
                                 
                         break;
+                    case SEARCH:
+                               System.out.print("What is te name of the person you are searching ");
+                            option = scanner.nextLine();
+            
+                         int pos3 = dept.binarySearch_nonRecursive(option,0,dept.getSize()-1);
+        
+                             if(pos3 == -1){
+                                    System.out.println("The name: "+ option+ " was no found");
+                            }else
+                                 System.out.println("The position of:"+ option +" is "+ pos3);
+         
+    
+                        break;
                     case SORT:
-                        System.out.println("Listing all people.");
+                        dept.bubbleRecursiveSort();
+                        dept.showdeparment();
                         break;
                     case GENERATE_DUMMY_DATA:
                         System.out.println("For Which Deparment would you like to generate dummy Data:");
@@ -162,11 +176,31 @@ public class CA2Algorithms {
             
                         if(option.matches("[0-9]+")){               
                             choice=Integer.parseInt(option)-1;
-                            
                             dept= deparments.get(choice);
-                            dept.DeleteEmployees();
+                            System.out.println("Select an option: \n1.-Delete all the person in the deparment\n2.-Delete the manager\n3.-Enter the Quantity of employees you want to delete\n4.-Delete the last person added");
+                            option = scanner.nextLine();
+                            switch(option){
+                                case "1":
+                                    dept.GetEmpty();
+                                    dept.showdeparment();
+                                    break;
+                                case "2":
+                                    dept.DeleteManager();
+                                    dept.showdeparment();
+                                    break;
+                                case "3":
+                                    System.out.println("How many employees do you want to delete?");
+                                    option = scanner.nextLine();
+                                    if(option.matches("[0-9]+")){            
+                                        choice=Integer.parseInt(option)-1;}
+                                        for(int i=0;i< choice;i++){
+                                          dept.DeleteEmployees();  
+                                        }
+                                    dept.showdeparment();
+                                    break;
+                            }
                             
-                        
+
                         
                         }
                         
