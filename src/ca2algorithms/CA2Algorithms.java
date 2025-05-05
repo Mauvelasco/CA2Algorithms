@@ -26,12 +26,27 @@ public class CA2Algorithms {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Calendar calendar = Calendar.getInstance();
-        Manager mgr = new Manager("Laura",122,calendar);
-        Employee emp1 = new Employee("Oscar",122,calendar);
-        Deparment dept = new Deparment("Finances");
-        Deparment dept1 = new Deparment("Specialized Unit");
-        Deparment dept2 = new Deparment("Human Rseources");
+        Calendar calendar;
+        Manager mgr;
+        Employee emp;
+        String name;
+        int salary;
+      
+        List<Employee> employeeList = new ArrayList<>();
+        ArrayList<Deparment> deparments=new ArrayList<>();
+        
+        Deparment dept;
+        
+        dept = new Deparment("Finances");
+        deparments.add(dept);
+        dept = new Deparment("Specialized Unit");
+        deparments.add(dept);
+        dept = new Deparment("Human Resources");
+        deparments.add(dept);
+        dept = deparments.get(0);
+        System.out.println(dept.getName());
+       
+        
         String option;
         int choice=0;
          Scanner scanner = new Scanner(System.in);
@@ -43,11 +58,14 @@ public class CA2Algorithms {
             }
             
             // Get user input
-            System.out.print("Enter an option (1-" + Menu.values().length + "): ");
+            System.out.print("Select an option from the menu: ");
             option = scanner.nextLine();
             
             if(option.matches("[0-9]+")){               
                 choice=Integer.parseInt(option);
+                }else{
+            System.out.println("Invalid input, try with an option of the Menu");
+            }
             
 
             if (choice >= 1 && choice <= Menu.values().length) {
@@ -56,46 +74,117 @@ public class CA2Algorithms {
                 // Handle user choice
                 switch (selected) {
                     case CREATE_DEPARMENT:
-                        System.out.println("You chose to add an employee.");
+                        if(deparments.size()<6){
+                        System.out.println("Enter the name of the new deparment!");
+                        name = scanner.nextLine();
+                        dept = new Deparment(name);
+                        deparments.add(dept);}
+                        else{
+                            System.out.println("No possible add more deparments");
+                        }
+                        
                         break;
                     case ADD_EMPLOYEES:
-                        System.out.println("You chose to add a manager.");
+                        System.out.println("In Which Deparment would you like to add an employee");
+                        for (int i=0;i<deparments.size();i++) {
+                            System.out.println((i+1)+".- "+deparments.get(i).getName());                          
+                            }
+                        
+                        option = scanner.nextLine();
+            
+                        if(option.matches("[0-9]+")){               
+                            choice=Integer.parseInt(option)-1;
+                        
+                            dept= deparments.get(choice);
+                        
+                                System.out.println("What Would you like to add ?(Select an option): \n 1.-Manager \n2.-Employee");
+                                option = scanner.nextLine();
+                                if(option.equalsIgnoreCase("1")){
+                                
+                                System.out.println("Enter the name of the manager");
+                                name = scanner.nextLine();
+                                System.out.println("Enter salary in Euros");
+                                salary = scanner.nextInt();
+                                calendar=Calendar.getInstance();
+                                mgr= new Manager (name,salary,calendar);
+                                dept.assignManager(mgr);
+                                
+                                } else if(option.equalsIgnoreCase("2")){
+                                    
+                                System.out.println("Enter the name of the Employee");
+                                name = scanner.nextLine();
+                                System.out.println("Enter salary in Euros");
+                                salary = scanner.nextInt();
+                                calendar=Calendar.getInstance();
+                                emp= new Employee (name,salary,calendar);
+                                dept.assignEmployee(emp);
+                                    }
+                                else{
+                                    System.out.println("Option no valid!");
+                                }
+                        
+                        
+                        }
+                        else{
+                            System.out.println("No valid input!");   } 
+                        
+                        
+                                
                         break;
                     case SORT:
                         System.out.println("Listing all people.");
                         break;
                     case GENERATE_DUMMY_DATA:
-                        System.out.println("Listing all people.");
+                        System.out.println("For Which Deparment would you like to generate dummy Data:");
+                        for (int i=0;i<deparments.size();i++) {
+                            System.out.println((i+1)+".- "+deparments.get(i).getName()); 
+                        }
+                             option = scanner.nextLine();
+            
+                        if(option.matches("[0-9]+")){               
+                            choice=Integer.parseInt(option)-1;
+                            
+                            dept= deparments.get(choice);
+                            dept.generateRandomUser(50);
+                            dept.showdeparment();
+                        }
+                        else{
+                            System.out.println("No valid input!");   }  
+                            
+
                         break;
                     case REMOVE:
-                        System.out.println("Exiting program.");
+                        System.out.println("From Which Deparment would you like to delete someone:");
+                        for (int i=0;i<deparments.size();i++) {
+                            System.out.println((i+1)+".- "+deparments.get(i).getName()); 
+                        }
+                             option = scanner.nextLine();
+            
+                        if(option.matches("[0-9]+")){               
+                            choice=Integer.parseInt(option)-1;
+                            
+                            dept= deparments.get(choice);
+                            dept.DeleteEmployees();
+                            
+                        
+                        
+                        }
                         
                         break;
                     case EXIT:
                         System.out.println("Exiting program.");
-                        
+                        break;
                 }
             } else {
                 System.out.println("Invalid option. Try again.");
             }
-            }else{
-            System.out.println("Invalid input, try with an option of the Menu");
-            }
+            
         }while(choice !=7);
         
-        System.out.println(mgr.getName());
-        dept.assign(mgr);
-        dept.assign(emp1);
-        dept.assign(mgr);
-        dept.assign(emp1);
-        dept.assign(mgr);
-        dept.assign(emp1);
-        System.out.println(dept.getManager());
-        System.out.println(mgr.getStartDate());
-        System.out.println(mgr.getWage());
-        
-        System.out.println(dept.getName());
-        System.out.println(dept.getSize());
+
+    
+     
+
         
 }
 }
