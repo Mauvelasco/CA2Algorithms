@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package ca2algorithms;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.*;
 import java.util.Calendar;
 
@@ -18,6 +21,8 @@ public class CA2Algorithms {
             SEARCH,
             SORT,
             GENERATE_DUMMY_DATA,
+            READ_DUMMY_DATA,
+            SHOW_INFO,
             REMOVE,
             EXIT
 }
@@ -25,7 +30,7 @@ public class CA2Algorithms {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, FileNotFoundException, ParseException {
         Calendar calendar;
         Manager mgr;
         Employee emp;
@@ -205,6 +210,24 @@ public class CA2Algorithms {
                         }
                         
                         break;
+                    case READ_DUMMY_DATA:
+                        dept.loadDummyData();
+                        break;
+                        case SHOW_INFO:
+                            System.out.println("For Which Deparment would you like to see the info");
+                        for (int i=0;i<deparments.size();i++) {
+                            System.out.println((i+1)+".- "+deparments.get(i).getName()); 
+                        }
+                             option = scanner.nextLine();
+            
+                        if(option.matches("[0-9]+")){               
+                            choice=Integer.parseInt(option)-1;
+                            
+                            dept= deparments.get(choice);
+                            
+                        dept.showdeparment();
+                        }
+                        break;
                     case EXIT:
                         System.out.println("Exiting program.");
                         break;
@@ -213,7 +236,7 @@ public class CA2Algorithms {
                 System.out.println("Invalid option. Try again.");
             }
             
-        }while(choice !=7);
+        }while(choice !=9);
         
 
     
