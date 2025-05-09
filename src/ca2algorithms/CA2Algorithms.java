@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package ca2algorithms;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
@@ -20,8 +22,6 @@ public class CA2Algorithms {
             ADD_EMPLOYEES,
             SEARCH,
             SORT,
-            GENERATE_DUMMY_DATA,
-            READ_DUMMY_DATA,
             SHOW_INFO,
             REMOVE,
             EXIT
@@ -40,6 +40,24 @@ public static int numberInput(String prompt) {
     return choice;
 
 }
+
+public static int displayDeparmentList(ArrayList<Deparment> deparments, String prompt) {
+            
+                        for (int i=0;i<deparments.size();i++) {
+                            System.out.println((i+1)+".- "+deparments.get(i).getName());                          
+                            }
+                        int choice = numberInput(prompt+"\n");
+               
+                            if (choice >= 1 && choice <= deparments.size()) {
+                            choice =choice - 1;
+                            
+                            return choice;}
+                            else{
+                                System.out.println("Invalid option!");
+                                return 0;
+                            }
+}
+
     /**
      * @param args the command line arguments
      */
@@ -83,11 +101,18 @@ public static int numberInput(String prompt) {
                 switch (selected) {
                     case CREATE_DEPARMENT:
                         if(deparments.size()<6){
-                        System.out.println("Enter the name of the new deparment!");
+                        System.out.println("Enter the name of the new deparment!\n");
                         name = scanner.nextLine();
                         dept = new Deparment(name);
                         deparments.add(dept);
-                            System.out.println(dept.getName()+" Deparment added successful!\n\n----------------------------------------------");
+                            System.out.println(dept.getName()+" Deparment added successful!\n\n----------------------------------------------\n");
+                        try (BufferedWriter writer = new BufferedWriter(new FileWriter(dept.getName()+".txt"))) {
+                    for (String j : dept.getList()) {
+                        writer.write(j +"\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
                         }
                         else{
                             System.out.println("No possible add more deparments");
@@ -95,23 +120,28 @@ public static int numberInput(String prompt) {
                         
                         break;
                     case ADD_EMPLOYEES:
-                       
-                        for (int i=0;i<deparments.size();i++) {
-                            System.out.println((i+1)+".- "+deparments.get(i).getName());                          
-                            }
-                        choice = numberInput("In Which Deparment would you like to add an employee\n");
-               
-                            if (choice >= 1 && choice <= deparments.size()) {
-                            choice =choice - 1;
+                            choice = displayDeparmentList(deparments,"In Which Deparment would you like to add an employee\n");
+                            
                             dept= deparments.get(choice);
                             
-                                choice = numberInput("What Would you like to add ?(Select an option): \n1.-Manager \n2.-Employee");
+                            choice = numberInput("which method would you like add employees: \n1.-Read text file \n2.-Generate Random \n3.-Manually\n");
+                            switch(choice){
+                                case 1:
+                                    dept.loadDummyData();
+                                    break;
+                                case 2:
+                                    choice = numberInput("How many entry you want to generate\n");
+                            dept.generateRandomUser(choice);
+                            dept.showdeparment();
+                                    break;
+                                case 3:
+                                    choice = numberInput("What Would you like to add ?(Select an option): \n1.-Manager \n2.-Employee\n");
 
                     switch (choice) {
                         case 1:
-                            System.out.println("Enter the name of the manager");
+                            System.out.println("Enter the name of the manager\n");
                             name = scanner.nextLine();
-                            System.out.println("Enter salary in Euros");
+                            System.out.println("Enter salary in Euros\n");
                             salary = scanner.nextInt();
                             calendar=Calendar.getInstance();
                             mgr= new Manager (name,salary,calendar);
@@ -119,30 +149,27 @@ public static int numberInput(String prompt) {
                             
                             break;
                         case 2:
-                            System.out.println("Enter the name of the Employee");
+                            System.out.println("Enter the name of the Employee\n");
                             name = scanner.nextLine();
-                            System.out.println("Enter salary in Euros");
+                            System.out.println("Enter salary in Euros\n");
                             salary = scanner.nextInt();
                             calendar=Calendar.getInstance();
                             emp= new Employee (name,salary,calendar);
                             dept.assignEmployee(emp);
                             break;
                         default:
-                            System.out.println("Option no valid!");
+                            System.out.println("Option no valid!\n");
                             break;
-                    }
-                            }else{
-                System.out.println("Invalid option!");}         
+                    
+                            }
+                     
+                            break;
+                            }
+  
                         break;
 
                     case SEARCH:
-                            for (int i=0;i<deparments.size();i++) {
-                            System.out.println((i+1)+".- "+deparments.get(i).getName());                          
-                            }
-                        choice = numberInput("In Which Deparment would you like to search someone");
-               
-                            if (choice >= 1 && choice <= deparments.size()) {
-                            choice =choice - 1;
+                            choice = displayDeparmentList(deparments,"In Which Deparment would you like to search\n");
                             dept= deparments.get(choice);
                             if(dept.getSize()>0){
                                System.out.print("What is te name of the person you are searching ");
@@ -156,41 +183,18 @@ public static int numberInput(String prompt) {
                                  System.out.println("The position of:"+ option +" is "+ pos3);
                             }else
                                     System.out.println("There is nobody in the deparment");
-                            }else{
-                                System.out.println("Invalid option!");
-                            }
-                        break;
+                            break;
+                            
                     case SORT:
+                        choice= displayDeparmentList(deparments,"Which Deparment would you like to sort");
+                        dept= deparments.get(choice);
                         dept.bubbleRecursiveSort();
-                        dept.showdeparment();
+                        dept.showdeparment20();
                         break;
-                    case GENERATE_DUMMY_DATA:
-                        
-                        for (int i=0;i<deparments.size();i++) {
-                            System.out.println((i+1)+".- "+deparments.get(i).getName()); 
-                        }
-                        choice = numberInput("For Which Deparment would you like to generate dummy Data:");
-                        if (choice >= 1 && choice <= deparments.size()) {
-                            
-                            choice =choice - 1;
-                            dept= deparments.get(choice);
-                            choice = numberInput("How many entry you want to generate");
-                            dept.generateRandomUser(choice);
-                            dept.showdeparment();
-                        }
-                        else{
-                            System.out.println("No valid input!");   }  
-                            
-
-                        break;
+                    
                     case REMOVE:
+                        choice= displayDeparmentList(deparments,"From Which Deparment would you like to delete someone:");
                         
-                        for (int i=0;i<deparments.size();i++) {
-                            System.out.println((i+1)+".- "+deparments.get(i).getName()); 
-                        }
-                        choice = numberInput("From Which Deparment would you like to delete someone:");
-                        if (choice >= 1 && choice <= deparments.size()) {
-                            choice = choice -1;
                             dept= deparments.get(choice);
                             choice = numberInput("Select an option: \n1.-Delete all the person in the deparment\n2.-Delete the manager\n3.-Enter the Quantity of employees you want to delete\n4.-Delete the last person added");
                             
@@ -201,7 +205,10 @@ public static int numberInput(String prompt) {
                                     break;
                                 case 2:
                                     dept.DeleteManager();
-                                    dept.showdeparment();
+                                    System.out.println("Would you like to see updated list? yes/no");
+                                    option = scanner.nextLine();
+                                    if(option.equalsIgnoreCase("yes")){
+                                    dept.showdeparment();}
                                     break;
                                 case 3:
                                     choice = numberInput("How many employees you want to delete");
@@ -218,40 +225,35 @@ public static int numberInput(String prompt) {
                                     System.out.println("Invalid input!");
                                     break;
                             }
-
-                        }else{
-                            System.out.println("Invalid Input!");
-                        }
+                        
                         
                         break;
-                    case READ_DUMMY_DATA:
-                        dept.loadDummyData();
-                        break;
+                   
                         case SHOW_INFO:
                             
-                        for (int i=0;i<deparments.size();i++) {
-                            System.out.println((i+1)+".- "+deparments.get(i).getName()); 
-                        }
-                            choice = numberInput("For Which Deparment would you like to see the info"); 
-                                if (choice >= 1 && choice <= deparments.size()) {
-                            choice = choice -1;
-                            
+                       choice = displayDeparmentList(deparments,"Which Deparment would you like to see information\n");
                             dept= deparments.get(choice);
-                            
-                        dept.showdeparment();
-                        }
-                                else{
-                                    System.out.println("Invalid option!");}
+                            dept.showdeparment();
+                        
                         break;
                     case EXIT:
-                        System.out.println("Exiting program.");
+                        System.out.println("Exiting program... Would you like to save the states of deparments? yes/no");
+                        option = scanner.nextLine();
+                                    if(option.equalsIgnoreCase("yes")){
+                                     for (int i=0;i<deparments.size();i++) {
+                                         dept= deparments.get(i);
+                                            
+                            }
+                                    
+                                    }
+                                    
                         break;
                 }
             } else {
                 System.out.println("Invalid option. Try again.");
             }
             
-        }while(choice !=9);
+        }while(choice !=7);
         
 
     
